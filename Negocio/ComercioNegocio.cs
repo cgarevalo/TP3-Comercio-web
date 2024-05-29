@@ -13,7 +13,7 @@ namespace Negocio
         AccesoDatos datosAcceso = new AccesoDatos();
 
         // Método para obtener la lista de artículos desde la base de datos
-        public List<Articulo> ListarArticulos()
+        public List<Articulo> ListarArticulos(string idAr = "")
         {
             List<Articulo> listaArticulos = new List<Articulo>();
 
@@ -24,8 +24,12 @@ namespace Negocio
                 AS categoria, M.Descripcion AS marca
                 FROM ARTICULOS A
                 INNER JOIN CATEGORIAS C ON A.IdCategoria = C.Id
-                INNER JOIN MARCAS M ON A.IdMarca = M.Id
-                ";
+                INNER JOIN MARCAS M ON A.IdMarca = M.Id ";
+
+                if (idAr != "")
+                {
+                    consulta += "WHERE A.Id = " + idAr;
+                }
 
                 datosAcceso.SetearConsulta(consulta);
                 datosAcceso.EjecutarConsulta();
@@ -138,14 +142,13 @@ namespace Negocio
         }
 
         // Método para agregar un nuevo artículo a la base de datos
-        public void Agregar(Articulo nuevoArticulo)
+        public void AgregarArticulo(Articulo nuevoArticulo)
         {
             try
             {
                 string consulta = @"INSERT INTO ARTICULOS (Codigo, Nombre, Descripcion, IdMarca,
                 IdCategoria, ImagenUrl, Precio)
-                Values (@codigo, @nombre, @descripcion, @idMarca, @idCategoria, @imagenUrl, @precio
-                ";
+                Values (@codigo, @nombre, @descripcion, @idMarca, @idCategoria, @imagenUrl, @precio)";
 
                 datosAcceso.SetearConsulta(consulta);
 
@@ -154,7 +157,7 @@ namespace Negocio
                 datosAcceso.SetearParametro("@descripcion", nuevoArticulo.Descripcion);
                 datosAcceso.SetearParametro("@idCategoria", nuevoArticulo.Categoria.Id);
                 datosAcceso.SetearParametro("@idMarca", nuevoArticulo.Marca.Id);
-                datosAcceso.SetearParametro("@imagenUrl", nuevoArticulo.Imagen);
+                datosAcceso.SetearParametro("@imagenUrl", nuevoArticulo.Imagen ?? (object)DBNull.Value);
                 datosAcceso.SetearParametro("@precio", nuevoArticulo.Precio);
 
                 datosAcceso.EjecutarAccion();
@@ -177,8 +180,7 @@ namespace Negocio
             {
                 string consulta = @"Update ARTICULOS Set Codigo = @codigo, Nombre = @nombre,
                 Descripcion = @desc, IdMarca = @idMarca, IdCategoria = @idCategoria, ImagenUrl = @imag,
-                Precio = @precio Where Id = @id
-                ";
+                Precio = @precio Where Id = @id";
 
                 datosAcceso.SetearConsulta(consulta);
 
@@ -187,7 +189,7 @@ namespace Negocio
                 datosAcceso.SetearParametro("@desc", modificarArt.Descripcion);
                 datosAcceso.SetearParametro("@idMarca", modificarArt.Marca.Id);
                 datosAcceso.SetearParametro("@idCategoria", modificarArt.Categoria.Id);
-                datosAcceso.SetearParametro("@imag", modificarArt.Imagen);
+                datosAcceso.SetearParametro("@imag", modificarArt.Imagen ?? (object)DBNull.Value);
                 datosAcceso.SetearParametro("@precio", modificarArt.Precio);
                 datosAcceso.SetearParametro("id", modificarArt.Id);
 

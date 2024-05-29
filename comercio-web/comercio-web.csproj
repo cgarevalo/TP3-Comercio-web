@@ -68,8 +68,13 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Default.aspx" />
+    <Content Include="Error.aspx" />
     <Content Include="Estilos\background.css" />
+    <Content Include="Estilos\clases.css" />
+    <Content Include="FormAgregarArticulo.aspx" />
     <Content Include="Global.asax" />
+    <Content Include="JavaScript\Validaciones\prueba.js" />
+    <Content Include="JavaScript\Varios\PreViewImgLocal.js" />
     <Content Include="ListaArticulos.aspx" />
     <Content Include="Web.config" />
   </ItemGroup>
@@ -80,6 +85,20 @@
     </Compile>
     <Compile Include="Default.aspx.designer.cs">
       <DependentUpon>Default.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Error.aspx.cs">
+      <DependentUpon>Error.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Error.aspx.designer.cs">
+      <DependentUpon>Error.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="FormAgregarArticulo.aspx.cs">
+      <DependentUpon>FormAgregarArticulo.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="FormAgregarArticulo.aspx.designer.cs">
+      <DependentUpon>FormAgregarArticulo.aspx</DependentUpon>
     </Compile>
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -112,7 +131,8 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Images\" />
+    <Folder Include="Images\Artículos\" />
+    <Folder Include="Images\Perfiles\" />
     <Folder Include="Models\" />
   </ItemGroup>
   <ItemGroup>
@@ -123,6 +143,10 @@
     <ProjectReference Include="..\Negocio\Negocio.csproj">
       <Project>{4d0b466b-aa99-4f37-ae99-b612338af59c}</Project>
       <Name>Negocio</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Seguridad\Seguridad.csproj">
+      <Project>{19823f12-42ce-41d8-b02f-879658a2da90}</Project>
+      <Name>Seguridad</Name>
     </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
