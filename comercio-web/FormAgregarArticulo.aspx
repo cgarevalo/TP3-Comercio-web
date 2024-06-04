@@ -62,7 +62,7 @@
             </div>
 
             <div class="d-flex">
-                <asp:Button ID="btnAceptar" CssClass="btn btn-primary me-2" OnClick="btnAceptar_Click" runat="server" Text="Agregar" />
+                <asp:Button ID="btnAceptar" CssClass="btn btn-primary me-2" OnClick="btnAceptar_Click" runat="server" Text="Aceptar" />
                 <a href="ListaArticulos.aspx" class="btn btn-secondary me-2">Cancelar</a>
 
                 <asp:UpdatePanel ID="UpdatePanel2" runat="server">

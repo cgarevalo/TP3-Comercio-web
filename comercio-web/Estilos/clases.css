@@ -1,4 +1,17 @@
-﻿.estiloValidador {
-    color: red;
-    font-size: 15px;
+﻿.favorito-container {
+    text-align: right;
+}
+
+.favorito {
+    cursor: pointer;
+    width: 24px;
+    height: 24px;
+}
+
+.favorito.activo {
+    content: url("Images/Iconos/bookmark-check.svg");
+}
+
+.moverDerecha {
+    margin-left: 76px;
 }

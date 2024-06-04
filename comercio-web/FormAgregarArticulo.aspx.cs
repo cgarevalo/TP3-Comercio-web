@@ -69,7 +69,7 @@ namespace comercio_web
                     txtNombre.Text = seleccionado.Nombre;
                     txtDescripcion.Text = seleccionado.Descripcion;
 
-                    string precioStr = seleccionado.Precio.ToString("0.00", new CultureInfo("es-ES"));
+                    string precioStr = seleccionado.Precio.ToString("N2", new CultureInfo("es-ES"));
                     txtPrecio.Text = precioStr;
                     ddlCategoria.SelectedValue = seleccionado.Categoria.Id.ToString();
                     ddlMarca.SelectedValue = seleccionado.Marca.Id.ToString();

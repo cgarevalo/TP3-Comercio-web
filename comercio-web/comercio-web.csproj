@@ -73,6 +73,7 @@
     <Content Include="Estilos\clases.css" />
     <Content Include="FormAgregarArticulo.aspx" />
     <Content Include="Global.asax" />
+    <Content Include="JavaScript\funciones.js" />
     <Content Include="JavaScript\Validaciones\prueba.js" />
     <Content Include="JavaScript\Varios\PreViewImgLocal.js" />
     <Content Include="ListaArticulos.aspx" />
@@ -132,6 +133,7 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Images\Artículos\" />
+    <Folder Include="Images\Iconos\" />
     <Folder Include="Images\Perfiles\" />
     <Folder Include="Models\" />
   </ItemGroup>

@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.Eventing.Reader;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -263,6 +265,109 @@ namespace Negocio
             finally
             {
                 datosAcceso.CerrarConexion();
+            }
+        }
+
+        public List<Articulo> FiltrarArticulos(string campo, string criterio, string filtro)
+        {
+            string consulta = @"SELECT A.Id AS idArticulo, A.Codigo, A.Nombre, A.Descripcion AS
+                artDescripcion, A.ImagenUrl AS imagen, A.Precio, A.IdCategoria, A.IdMarca, C.Descripcion
+                AS categoria, M.Descripcion AS marca
+                FROM ARTICULOS A
+                INNER JOIN CATEGORIAS C ON A.IdCategoria = C.Id
+                INNER JOIN MARCAS M ON A.IdMarca = M.Id
+                WHERE ";
+
+            List<Articulo> listafiltrada = new List<Articulo>();
+            AccesoDatos datos = new AccesoDatos();
+
+            try
+            {
+                // Arma la consulta según el campo seleccionado
+                switch (campo)
+                {
+                    case "Categoría":
+                        consulta += "C.Descripcion ";
+                        break;
+
+                    case "Marca":
+                        consulta += "M.Descripcion ";
+                        break;
+
+                    case "Precio":
+                        consulta += "A.Precio ";
+                        break;
+                }
+
+                // Agrega la condición según el criterio seleccionado
+                switch (criterio)
+                {
+                    case "Comienza con":
+                        consulta += "LIKE @filtro + '%'";
+                        break;
+
+                    case "Contiene":
+                        consulta += "LIKE '%' + @filtro + '%'";
+                        break;
+
+                    case "Termina con":
+                        consulta += "LIKE '%' + @filtro";
+                        break;
+
+                    case "Menor a":
+                        consulta += "< @filtro";
+                        break;
+
+                    case "Igual a":
+                        consulta += "= @filtro";
+                        break;
+
+                    case "Mayor a":
+                        consulta += "> @filtro";
+                        break;
+                }
+
+                datos.SetearConsulta(consulta);
+
+                // Convierte el filtro a decimal si el campo es Precio
+                if (campo == "Precio" && Decimal.TryParse(filtro, out decimal filtroDecimal))
+                    datos.SetearParametro("@filtro", filtroDecimal);
+                else
+                    datos.SetearParametro("@filtro", filtro);
+
+                datos.EjecutarLectura();
+
+                while (datos.Lector.Read())
+                {
+                    Articulo art = new Articulo();
+                    art.Id = (int)datos.Lector["idArticulo"];
+                    art.CodigoArticulo = (string)datos.Lector["Codigo"];
+                    art.Nombre = (string)datos.Lector["Nombre"];
+                    art.Descripcion = (string)datos.Lector["artDescripcion"];
+                    if (!(datos.Lector["imagen"] is DBNull))
+                        art.Imagen = (string)datos.Lector["imagen"];
+                    art.Precio = (decimal)datos.Lector["Precio"];
+
+                    art.Categoria = new Categoria();
+                    art.Categoria.Id = (int)datos.Lector["IdCategoria"];
+                    art.Categoria.Descripcion = (string)datos.Lector["categoria"];
+
+                    art.Marca = new Marca();
+                    art.Marca.Id = (int)datos.Lector["IdMarca"];
+                    art.Marca.Descripcion = (string)datos.Lector["marca"];
+
+                    listafiltrada.Add(art);
+                }
+
+                return listafiltrada;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                datos.CerrarConexion();
             }
         }
     }
