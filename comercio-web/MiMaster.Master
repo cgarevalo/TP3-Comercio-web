@@ -35,25 +35,45 @@
                         <li class="nav-item">
                             <a class="nav-link active" aria-current="page" href="Default.aspx">Home</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="ListaArticulos.aspx">Artículos</a>
-                        </li>
+
+                        <%if (Seguridad.Validacion.SesionActiva(Session["usuarioEnSesion"]))
+                            {%>
                         <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Dropdown
+                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Mi cuenta
                             </a>
                             <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="#">Action</a></li>
-                                <li><a class="dropdown-item" href="#">Another action</a></li>
+                                <li><a class="dropdown-item" href="MiPerfil.aspx">Mi perfíl</a></li>
+                                <li><a class="dropdown-item" href="Favoritos.aspx">Favoritos</a></li>
+                                <%if (Seguridad.Autenticacion.EsAdministrador(Session["usuarioEnSesion"]))
+                                    { %>
                                 <li>
                                     <hr class="dropdown-divider">
                                 </li>
-                                <li><a class="dropdown-item" href="#">Something else here</a></li>
+                                <li><a class="dropdown-item" href="ListaArticulos.aspx">Lista de artículos</a></li>
+                                <%  } %>
                             </ul>
                         </li>
+                        <%  }%>
+
                         <li class="nav-item">
-                            <a class="nav-link disabled" aria-disabled="true">Disabled</a>
+                            <a class="nav-link" href="#">Acerca de</a>
                         </li>
                     </ul>
+                </div>
+
+                <div class="d-flex">
+                    <%if (!Seguridad.Validacion.SesionActiva(Session["usuarioEnSesion"]))
+                        { %>
+                    <a href="Login.aspx" class="btn btn-success me-3">Login</a>
+                    <a href="Registro.aspx" class="btn btn-outline-success me-3">Registrarse</a>
+                    <%}
+                        else
+                        { %>
+                    <asp:Button ID="btnSalir" CssClass="btn btn-outline-primary me-3" runat="server" Text="Salir" OnClick="btnSalir_Click" />
+                    <asp:Label ID="lblUsuario" CssClass="text-light m-auto me-3" runat="server" Text=""></asp:Label>
+                     <% } %>
+
+                    <asp:Image ID="imgPerfil" runat="server" Style="height: 40px; width: 40px; border-radius: 50%; background-color: gray" CssClass="me-3" />
                 </div>
             </div>
         </nav>
@@ -62,7 +82,6 @@
             <div>
                 <hr />
                 <asp:ContentPlaceHolder ID="ContentPlaceHolder1" runat="server">
-
                 </asp:ContentPlaceHolder>
             </div>
         </div>

@@ -19,7 +19,7 @@
             <div class="mb-3">
                 <label for="txtNombre" class="form-label">Nombre</label>
                 <asp:TextBox ID="txtNombre" CssClass="form-control" runat="server"></asp:TextBox>
-                <asp:RequiredFieldValidator ErrorMessage="Nombre Requerido" CssClass="text-danger" ControlToValidate="txtNombre" runat="server" />
+                <asp:RequiredFieldValidator ErrorMessage="Nombre requerido" CssClass="text-danger" ControlToValidate="txtNombre" runat="server" />
             </div>
             <div class="mb-3">
                 <label>Descripción</label>
@@ -57,8 +57,10 @@
             <div class="mb-3">
                 <label for="txtPrecio" class="form-label">Precio</label>
                 <asp:TextBox ID="txtPrecio" CssClass="form-control" runat="server"></asp:TextBox>
-                <asp:RequiredFieldValidator ErrorMessage="Precio requerido" CssClass="text-danger" ControlToValidate="txtPrecio" runat="server" />
-                <asp:RegularExpressionValidator ErrorMessage="Ingrese un formato válido" CssClass="text-danger" ControlToValidate="txtPrecio" ValidationExpression="^\d+(,\d{1,2})?$" runat="server" />
+                <div class="modal-content">
+                    <asp:RequiredFieldValidator ErrorMessage="Precio requerido" CssClass="text-danger" ControlToValidate="txtPrecio" runat="server" />
+                    <asp:RegularExpressionValidator ErrorMessage="Ingrese un precio válido" CssClass="text-danger" ControlToValidate="txtPrecio" ValidationExpression="^\d+(,\d{1,2})?$" runat="server" />
+                </div>
             </div>
 
             <div class="d-flex">
@@ -80,7 +82,6 @@
                     </ContentTemplate>
                 </asp:UpdatePanel>
             </div>
-
         </div>
 
         <div class="col-5">
@@ -95,7 +96,8 @@
                         { %>
                     <div class="mb-3">
                         <label for="fuImagenArt" class="form-label">Seleccione una imagen</label>
-                        <asp:FileUpload ID="fuImagenArt" CssClass="form-control" OnChange="preVisualizarImagen()" runat="server" />
+                        <asp:FileUpload ID="fuImagenArt" CssClass="form-control" accept=".jpg,.jpeg,.png,.gif" OnChange="preVisualizarImagen()" runat="server" />
+                        <asp:Label ID="lblErrorLocal" CssClass="text-danger" runat="server" Text=""></asp:Label>
                     </div>
                     <%  }
 
@@ -103,7 +105,11 @@
                         { %>
                     <div class="mb-3">
                         <label for="txtImagenArt" class="form-label">Pegue la url de la imagen</label>
-                        <asp:TextBox ID="txtImagenArt" CssClass="form-control" OnTextChanged="txtImagenArt_TextChanged" AutoPostBack="true" runat="server"></asp:TextBox>
+                        <div class="input-group">
+                            <asp:TextBox ID="txtImagenArt" CssClass="form-control" runat="server"></asp:TextBox>
+                            <asp:Button ID="btnVer" CssClass="btn btn-success" runat="server" Text="Ver" OnClick="btnVer_Click" />
+                        </div>
+                        <asp:Label ID="lblErrorUrl" CssClass="text-danger" runat="server" Text=""></asp:Label>
                     </div>
                     <%  } %>
 

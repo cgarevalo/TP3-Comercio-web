@@ -9,6 +9,7 @@ using Negocio;
 using System.Globalization;
 using Seguridad;
 using System.IO;
+using System.Text.RegularExpressions;
 
 namespace comercio_web
 {
@@ -29,7 +30,7 @@ namespace comercio_web
                 if (!IsPostBack)
                 {
                     List<Categoria> categoriasLista = negocio.ListaCategorias();
-                    categoriasLista.Add(new Categoria { Descripcion = "Nueva categoría"});
+                    categoriasLista.Add(new Categoria { Descripcion = "Nueva categoría" });
                     List<Marca> marcasLista = negocio.ListaMarcas();
                     marcasLista.Add(new Marca { Descripcion = "Nueva marca" });
 
@@ -84,9 +85,9 @@ namespace comercio_web
                         else
                         {
                             // Marca el chkOrigen como seleccionado
-                            chkOrigen.Checked = true; 
+                            chkOrigen.Checked = true;
                             // Sincroniza OrigenImagen con el estado de chkOrigen
-                            OrigenImagen = chkOrigen.Checked; 
+                            OrigenImagen = chkOrigen.Checked;
                             imgImagenArt.Src = "~/Images/Artículos/" + seleccionado.Imagen;
                         }
                     }
@@ -99,11 +100,6 @@ namespace comercio_web
             }
         }
 
-        protected void txtImagenArt_TextChanged(object sender, EventArgs e)
-        {
-            imgImagenArt.Src = txtImagenArt.Text;
-        }
-
         protected void chkOrigen_CheckedChanged(object sender, EventArgs e)
         {
             // Sincroniza OrigenImagen con el estado de chkOrigen
@@ -112,14 +108,14 @@ namespace comercio_web
 
         protected void btnAceptar_Click(object sender, EventArgs e)
         {
-            Articulo nuevoArticulo = new Articulo();
-
             // Valida la página antes de realizar la operación de agregar o modificar
             Page.Validate();
 
             // Si la página no es válida, se interrumpe el flujo y se sale
             if (!Page.IsValid)
                 return;
+
+            Articulo nuevoArticulo = new Articulo();
 
             // Si la página es válida, continúa con la lógica de agregar o modificar el libro
             try
@@ -152,15 +148,69 @@ namespace comercio_web
                 nuevoArticulo.Marca = new Marca();
                 nuevoArticulo.Marca.Id = int.Parse(ddlMarca.SelectedValue);
 
-                // Maneja la imagen si es local del artículo
-                if (fuImagenArt.HasFile)
+
+                // Switch para manejar la imagen según su origen
+                switch (OrigenImagen)
                 {
-                    nuevoArticulo.Imagen = GuardarImgLocal();
-                }
-                // Maneja la imagen si es por url
-                else if (!String.IsNullOrEmpty(imagen))
-                {
-                    nuevoArticulo.Imagen = imagen;
+                    case true:
+                        // Maneja la imagen si es de origen local
+                        if (fuImagenArt.HasFile)
+                        {
+                            // Obtiene la extensión del archivo subido
+                            string extensionArchivo = Path.GetExtension(fuImagenArt.FileName).ToLower();
+                            // Lista de extensiones de imagen permitidas
+                            string[] extensiones = { ".jpg", ".jpeg", ".png", ".gif" };
+
+                            // Verifica si la extensión del archivo subido está en la lista de extensiones permitidas
+                            if (extensiones.Contains(extensionArchivo))
+                            {
+                                lblErrorLocal.Text = string.Empty;
+                                nuevoArticulo.Imagen = GuardarImgLocal();
+                            }
+                            else
+                            {
+                                // Si la extensión no es válida, muestra un mensaje de error y sale
+                                lblErrorLocal.Text = "Solo imágenes png, jpg, jpeg y gif";
+                                return;
+                            }
+                        }
+                        // Si se está modificando (hay un id en la query string)
+                        else if (Request.QueryString["id"] != null)
+                        {
+                            // Conserva la imagen local si no se seleccionó otra al modificar
+                            nuevoArticulo.Imagen = ((Articulo)Session["artSeleccionado"]).Imagen;
+                        }
+                        else
+                        {
+                            // Si no se seleccionó una imagen nueva y no se está modificando, muestra un mensaje de error y retorna
+                            lblErrorLocal.Text = "Seleccione una imagen";
+                            return;
+                        }
+                        break;
+
+                    case false:
+                        // Maneja la imagen si es por url
+                        if (!String.IsNullOrWhiteSpace(imagen))
+                        {
+                            // Verifica si la URL es válida, si no, sale
+                            if (!ComprobarUrl())
+                                return;
+
+                            nuevoArticulo.Imagen = imagen;
+                        }
+                        else if (Request.QueryString["id"] != null)
+                        {
+                            lblErrorUrl.Text = string.Empty;
+                            // Conserva la url existente si no se proporcionó una nueva al modificar
+                            nuevoArticulo.Imagen = ((Articulo)Session["artSeleccionado"]).Imagen;
+                        }
+                        else
+                        {
+                            // Si no se proporcionó una url nueva y no se está modificando, muestra un mensaje de error y retorna
+                            lblErrorUrl.Text = "Imagen por url requerida";
+                            return;
+                        }
+                        break;
                 }
 
                 if (Request.QueryString["id"] != null)
@@ -169,10 +219,6 @@ namespace comercio_web
                     string id = Request.QueryString["id"];
 
                     nuevoArticulo.Id = int.Parse(id);
-
-                    // Conserva la imagen local si no se seleccionó otra al modificar
-                    if (!fuImagenArt.HasFile)
-                        nuevoArticulo.Imagen = ((Articulo)(Session["artSeleccionado"])).Imagen;
 
                     negocio.Modificar(nuevoArticulo);
                 }
@@ -394,6 +440,37 @@ namespace comercio_web
             {
                 Session.Add("error", ex.ToString());
                 Response.Redirect("Error.aspx");
+            }
+        }
+
+        protected void btnVer_Click(object sender, EventArgs e)
+        {
+            if (!String.IsNullOrWhiteSpace(txtImagenArt.Text))
+                ComprobarUrl();
+            else
+                lblErrorUrl.Text = "Primero ingrese una url";
+        }
+
+        private bool ComprobarUrl()
+        {
+            string urlReg = @"^(https?:\/\/)?([a-zA-Z0-9-]+\.)+[a-zA-Z]{2,}(:\d+)?(\/[^\s]*)?$";
+            string urlImagen = txtImagenArt.Text;
+
+            // Verifica si la url es válida
+            if (Regex.IsMatch(urlImagen, urlReg))
+            {
+                // Asigna la url al src de imgImagenArt
+                imgImagenArt.Src = txtImagenArt.Text;
+
+                // Limpiar el mensaje de error si la url es válida
+                lblErrorUrl.Text = string.Empty;
+                return true;
+            }
+            else
+            {
+                // Muestra un mensaje de error si la url no es válida
+                lblErrorUrl.Text = "Ingrese una url válida";
+                return false;
             }
         }
     }

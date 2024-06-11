@@ -38,7 +38,7 @@ namespace Seguridad
         // Devuelve true si la sesión está activa, si no, devuelve false
         public static bool SesionActiva(object usuario)
         {
-            // Convierte el objeto usuario en un objeto Usuario o establece usu en null si es nulo.
+            // Convierte el object usuario en un objeto Usuario o establece usu en null si es nulo.
             Usuario user = usuario != null ? (Usuario)usuario : null;
 
             // Comprueba si user no es nulo y tiene un Id distinto de cero para determinar si la sesión está activa.
@@ -47,5 +47,10 @@ namespace Seguridad
             else
                 return false; // La sesión no está activa.
         }
+
+        //public static bool EsFavorito(List<Favorito> favoritos, Usuario usuario)
+        //{
+
+        //}
     }
 }

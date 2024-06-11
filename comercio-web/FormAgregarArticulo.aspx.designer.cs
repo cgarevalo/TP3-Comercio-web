@@ -222,6 +222,15 @@ namespace comercio_web
         protected global::System.Web.UI.WebControls.FileUpload fuImagenArt;
 
         /// <summary>
+        /// Control lblErrorLocal.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblErrorLocal;
+
+        /// <summary>
         /// Control txtImagenArt.
         /// </summary>
         /// <remarks>
@@ -229,6 +238,24 @@ namespace comercio_web
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox txtImagenArt;
+
+        /// <summary>
+        /// Control btnVer.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnVer;
+
+        /// <summary>
+        /// Control lblErrorUrl.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblErrorUrl;
 
         /// <summary>
         /// Control imgImagenArt.
