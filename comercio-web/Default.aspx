@@ -3,21 +3,6 @@
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
     <link href="Estilos/clases.css" rel="stylesheet" />
     <script src="JavaScript/funciones.js"></script>
-    <%--<style>
-        .favorito-container {
-            text-align: right;
-        }
-
-        .favorito {
-            cursor: pointer;
-            width: 24px;
-            height: 24px;
-        }
-
-        .favorito.active {
-            content: url("Images/Iconos/bookmark-check.svg");
-        }
-    </style>--%>
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
     <asp:ScriptManager ID="ScriptManager1" runat="server"></asp:ScriptManager>
@@ -33,7 +18,7 @@
 
             <div class="row">
                 <!-- Filtro a la izquierda -->
-                <div class="col-3 bg-body-secondary">
+                <div class="col-3 limiteDiv bg-body">
                     <label for="chkFiltro" class="form-label">Filtro</label>
                     <asp:CheckBox ID="chkFiltro" CssClass="form-control mb-3" AutoPostBack="true" OnCheckedChanged="chkFiltro_CheckedChanged" runat="server" />
 
@@ -58,8 +43,8 @@
                         </div>
 
                     </div>
-                    <asp:Button ID="btnBuscar" Text="Buscar" Enabled="false" OnClick="btnBuscar_Click" CssClass="btn btn-primary me-3" runat="server" />
-                    <asp:Button ID="btnLimpiarFiltro" CssClass="btn btn-primary" OnClick="btnLimpiarFiltro_Click" runat="server" Enabled="false" Text="Limpiar filtros" />
+                    <asp:Button ID="btnBuscar" Text="Buscar" Enabled="false" OnClick="btnBuscar_Click" CssClass="btn btn-primary mb-3 me-3" runat="server" />
+                    <asp:Button ID="btnLimpiarFiltro" CssClass="btn btn-primary mb-3" OnClick="btnLimpiarFiltro_Click" runat="server" Enabled="false" Text="Limpiar filtros" />
                 </div>
 
                 <!-- Repeater -->
@@ -67,15 +52,17 @@
                     <div class="row row-cols-1 row-cols-md-3 g-4">
                         <asp:Repeater ID="repArticulos" runat="server">
                             <ItemTemplate>
-                                <div class="col">
+                                <div class="col-9">
                                     <div class="card">
-                                        <img src="<%#Eval("Imagen") %>" class="card-img-top" height="500px" alt="Artículo" />
+                                        <%-- Obtiene la imagen correspondiente y si no existe, carga una imagen por defecto --%>
+                                        <img src="<%# ObtenerImagenArt(Eval("Imagen")) %>" class="imgTamanio" alt="Artículo" />
                                         <div class="card-body">
-                                            <h4><%#Eval("Nombre") %></h4>
-                                            <p><%#Eval("Descripcion") %></p>
+                                            <h4 class="card-title text-truncate"><%#Eval("Nombre") %></h4>
+                                            <p class="card-text text-truncate"><%#Eval("Descripcion") %></p>
                                             <p><strong>Precio:</strong> <%#Eval("Precio", "{0:N2}") %></p>
-                                            <div class="favorito-container">
-                                                <asp:ImageButton ID="btnIconoFav" runat="server" CommandArgument='<%#Eval("Id") %>' CommandName="articuloId" ImageUrl='<%# ImagenBotonFav(Eval("Id")) %>' AlternateText="Agregar a Favoritos"  OnClick="btnIconoFav_Click" />
+                                            <asp:Button ID="btnVerDetalles" CssClass="btn btn-secondary" runat="server" Text="Detalles" CommandArgument='<%# Eval("Id") %>' OnClick="btnVerDetalles_Click" />
+                                            <div class="float-end">
+                                                <asp:ImageButton ID="btnIconoFav" runat="server" CommandArgument='<%#Eval("Id") %>' CommandName="articuloId" ImageUrl='<%# ImagenBotonFav(Eval("Id")) %>' AlternateText="Agregar a Favoritos" OnClick="btnIconoFav_Click" />
                                             </div>
                                         </div>
                                     </div>

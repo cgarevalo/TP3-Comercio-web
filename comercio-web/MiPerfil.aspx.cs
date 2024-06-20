@@ -74,36 +74,28 @@ namespace comercio_web
                     {
                         try
                         {
-                            // Obtiene la ruta de la carpeta
-                            string ruta = Server.MapPath("~/Images/Perfiles/");
+                            // Obtiene la extensión del archivo subido
+                            string extensionArchivo = Path.GetExtension(fudImagenPerfil.FileName).ToLower();
 
-                            // Verifica si el usuario ya tiene una imagen de perfil
-                            if (!String.IsNullOrEmpty(usuarioMod.UrlImagenPerfil))
+                            // Lista de extensiones de imagen permitidas
+                            string[] extensiones = { ".jpg", ".jpeg", ".png", ".gif" };
+
+                            // Verifica si la extensión del archivo subido está en la lista de extensiones permitidas
+                            if (extensiones.Contains(extensionArchivo))
                             {
-                                // Ruta completa de la imagen antigua
-                                string rutaImgAntigua = Path.Combine(ruta, usuarioMod.UrlImagenPerfil);
+                                lblFudError.Text = string.Empty;
+                                // Asigna el nombre de la imagen a UrlImagenPerfil de Usuario y la guarda
+                                usuarioMod.UrlImagenPerfil = Seguridad.Utilidades.GuardarImagen(fudImagenPerfil.PostedFile, usuarioMod, Server.MapPath("~"));
 
-                                if (File.Exists(rutaImgAntigua))
-                                {
-                                    // Elimina la imagen antigua si existe
-                                    File.Delete(rutaImgAntigua);
-                                }
+                                // Carga la imagen en el imgPerfil
+                                imgPerfil.Src = "~/Images/Perfiles/" + usuarioMod.UrlImagenPerfil;
                             }
-
-                            // Generar un nombre único para la imagen
-                            string nombreImagen = $"user-{usuarioMod.Id.ToString()}-.jpg";
-
-                            // Combina la ruta de la imagen con el nombre
-                            string rutaCompleta = Path.Combine(ruta, nombreImagen);
-
-                            // Guarda la imagen
-                            fudImagenPerfil.SaveAs(rutaCompleta);
-
-                            // Asigna el nombre de la imagen a UrlImagenPerfil de Usuario
-                            usuarioMod.UrlImagenPerfil = nombreImagen;
-
-                            // Carga la imagen en el imgPerfil
-                            imgPerfil.Src = "~/Images/Perfiles/" + usuarioMod.UrlImagenPerfil;
+                            else
+                            {
+                                // Si la extensión no es válida, muestra un mensaje de error y sale
+                                lblFudError.Text = "Solo imágenes png, jpg, jpeg y gif";
+                                return;
+                            }
                         }
                         catch (Exception ex)
                         {
@@ -112,8 +104,14 @@ namespace comercio_web
                         }
                     }
 
+                    // Actualiza al usuario en sesión
+                    Session["usuarioEnSesion"] = usuarioMod;
+
                     // Actualiza los datos del usuario
                     negocioUsuario.ActualizarPerfil(usuarioMod);
+
+                    // Redirige a la misma página para que se refleje el cambio en la foto de perfil, sin tener que recargar la página manualmente
+                    Response.Redirect("MiPerfil.aspx", false);
                 }
             }
             catch (Exception ex)

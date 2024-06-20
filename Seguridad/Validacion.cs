@@ -47,10 +47,5 @@ namespace Seguridad
             else
                 return false; // La sesión no está activa.
         }
-
-        //public static bool EsFavorito(List<Favorito> favoritos, Usuario usuario)
-        //{
-
-        //}
     }
 }

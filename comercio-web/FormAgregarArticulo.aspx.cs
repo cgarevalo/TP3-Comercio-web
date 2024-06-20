@@ -21,6 +21,13 @@ namespace comercio_web
         ComercioNegocio negocio = new ComercioNegocio();
         protected void Page_Load(object sender, EventArgs e)
         {
+            if (!(Seguridad.Autenticacion.EsAdministrador(Session["usuarioEnSesion"])))
+            {
+                Session.Add("error", "Se requieren permisos de administrador para estár en la página");
+                Response.Redirect("Error.aspx", false);
+                return;
+            }
+
             // Actualizar OrigenImagen en cada carga de página, incluidos los postbacks
             OrigenImagen = chkOrigen.Checked;
             ConfirmarEliminacion = false;
@@ -165,7 +172,7 @@ namespace comercio_web
                             if (extensiones.Contains(extensionArchivo))
                             {
                                 lblErrorLocal.Text = string.Empty;
-                                nuevoArticulo.Imagen = GuardarImgLocal();
+                                nuevoArticulo.Imagen = Seguridad.Utilidades.GuardarImagen(fuImagenArt.PostedFile, nuevoArticulo, Server.MapPath("~"));
                             }
                             else
                             {
@@ -393,22 +400,6 @@ namespace comercio_web
             }
         }
 
-        private string GuardarImgLocal()
-        {
-            // Obtiene la ruta
-            string ruta = Server.MapPath("./Images/Artículos/");
-
-            // Genera un nombre único para la imagen
-            string nombreImg = Guid.NewGuid().ToString() + ".jpg";
-            string rutaCompleta = Path.Combine(ruta, nombreImg);
-
-            // Guarda la imagen
-            fuImagenArt.PostedFile.SaveAs(rutaCompleta);
-
-            // Retorna el nombre de la imagen
-            return nombreImg;
-        }
-
         protected void btnEliminar_Click(object sender, EventArgs e)
         {
             if (Request.QueryString["id"] != null)
@@ -425,8 +416,21 @@ namespace comercio_web
                 {
                     if (chkEliminar.Checked)
                     {
+                        UsuarioNegocio negocioUser = new UsuarioNegocio();
                         Articulo articulo = (Articulo)Session["artSeleccionado"];
+
+                        // Primero elimina los favoritos asociados a este artículo
+                        negocioUser.EliminarFavoritoPorArticulo(articulo.Id);
+
+                        // Segundo elimina la imagen local, si es de origen local,
+                        if (OrigenImagen)
+                        {
+                            Seguridad.Utilidades.EliminarImagenLocal(articulo, Server.MapPath("~"));
+                        }                      
+
+                        // Despues elimina el artículo
                         negocio.Eliminar(articulo.Id);
+
                         Response.Redirect("ListaArticulos.aspx", false);
                     }
                 }

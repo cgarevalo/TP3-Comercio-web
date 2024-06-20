@@ -47,7 +47,7 @@
                 <div class="col-3">
                     <div class="mb-3">
                         <label for="ddlCriterio" class="form-label">Criterio</label>
-                        <asp:DropDownList ID="ddlCriterio" CssClass="form-control" runat="server"></asp:DropDownList>
+                        <asp:DropDownList ID="ddlCriterio" CssClass="form-control" runat="server" AutoPostBack ="true" OnSelectedIndexChanged="ddlCriterio_SelectedIndexChanged"></asp:DropDownList>
                     </div>
                 </div>
 
@@ -57,8 +57,8 @@
                         <div class="input-group">
                             <asp:TextBox ID="txtFiltroAvanzado" CssClass="form-control" runat="server"></asp:TextBox>
                             <asp:Button ID="btnBuscar" Text="Buscar" CssClass="btn btn-primary" OnClick="btnBuscar_Click" runat="server" />
-                            <asp:Label ID="lblError" runat="server" CssClass="form-label text-danger" Text=""></asp:Label>
                         </div>
+                        <asp:Label ID="lblError" runat="server" CssClass="form-label text-danger" Text=""></asp:Label>
                     </div>
                 </div>
             </div>

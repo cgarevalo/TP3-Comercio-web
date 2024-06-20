@@ -44,6 +44,7 @@
   <ItemGroup>
     <Compile Include="Autenticacion.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Utilidades.cs" />
     <Compile Include="Validacion.cs" />
   </ItemGroup>
   <ItemGroup>

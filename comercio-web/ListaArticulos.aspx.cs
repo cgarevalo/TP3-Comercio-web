@@ -16,6 +16,13 @@ namespace comercio_web
 
         protected void Page_Load(object sender, EventArgs e)
         {
+            if (!(Seguridad.Autenticacion.EsAdministrador(Session["usuarioEnSesion"])))
+            {
+                Session.Add("error", "Se requieren permisos de administrador para estár en la página");
+                Response.Redirect("Error.aspx", false);
+                return;
+            }
+
             FiltroAvanzado = chkFiltroAvanzado.Checked;
 
             if (!IsPostBack)
@@ -30,7 +37,7 @@ namespace comercio_web
         protected void dgvArticulos_SelectedIndexChanged(object sender, EventArgs e)
         {
             string id = dgvArticulos.SelectedDataKey.Value.ToString();
-            Response.Redirect("FormAgregarArticulo.aspx?id=" + id);
+            Response.Redirect($"FormAgregarArticulo.aspx?id={id}");
         }
 
         protected void txtFiltroNombreCodigo_TextChanged(object sender, EventArgs e)
@@ -46,20 +53,35 @@ namespace comercio_web
 
         protected void chkFiltroAvanzado_CheckedChanged(object sender, EventArgs e)
         {
-            // Sincroniza FiltroAvanzado con el chkFiltroAvanzado
+            ActualizarFiltroAvanzado();
+            LimpiarFiltro();
+        }
+
+        private void ActualizarFiltroAvanzado()
+        {
+            // Actualiza la propiedad FiltroAvanzado basado en el estado del chkFiltro
             FiltroAvanzado = chkFiltroAvanzado.Checked;
-            // Deshabilita el txtFiltroNombreCodigo si se dio en el chkFiltroAvanzado
+
+            // Habilita o deshabilita el txtBuscarProducto de búsqueda de producto según el estado del FiltroAvanzado
             txtFiltroNombreCodigo.Enabled = !FiltroAvanzado;
 
-            //if (FiltroAvanzado)
-            //{
-            //    ddlCampo.SelectedIndex = 0;
-            //    ddlCampo_SelectedIndexChanged(sender, e);
-            //}
+            // Habilita o deshabilita el ddlCampo de campo según el estado del chkFiltro
+            ddlCampo.Enabled = chkFiltroAvanzado.Checked;
         }
 
         protected void ddlCampo_SelectedIndexChanged(object sender, EventArgs e)
         {
+            // Habilita o deshabilita ddlCriterio dependiendo de lo que se haya selecionado en ddlCampo
+            if (ddlCampo.SelectedItem.ToString() != "Seleccione un campo")
+                ddlCriterio.Enabled = true;          
+            else
+            {
+                // Deshabilita ddlCriterio, txtFiltroAvanzado y btnBuscar si se seleccionó "Seleccione un campo"
+                ddlCriterio.Enabled = false;
+                txtFiltroAvanzado.Enabled = ddlCriterio.Enabled;
+                btnBuscar.Enabled = ddlCriterio.Enabled;
+            }
+
             // Vacía el contenido de ddlCriterio, antes de cargarlo, para que no se acumulen
             ddlCriterio.Items.Clear();
 
@@ -69,11 +91,13 @@ namespace comercio_web
                 // Categoría y marca tienen los mismos criterios
                 case "Categoría":
                 case "Marca":
+                    ddlCriterio.Items.Add("Seleccione un criterio");
                     ddlCriterio.Items.Add("Comienza con");
                     ddlCriterio.Items.Add("Contiene");
                     ddlCriterio.Items.Add("Termina con");
                     break;
                 case "Precio":
+                    ddlCriterio.Items.Add("Seleccione un criterio");
                     ddlCriterio.Items.Add("Menor a");
                     ddlCriterio.Items.Add("Igual a");
                     ddlCriterio.Items.Add("Mayor a");
@@ -81,11 +105,32 @@ namespace comercio_web
             }
         }
 
+        protected void ddlCriterio_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            // Habilita o deshabilita el txtFiltroAvanzado dependiendo del estado de ddlCriterio, o lo que se haya selecionado
+            if (ddlCriterio.SelectedItem.ToString() != "Seleccione un criterio")
+            {
+                txtFiltroAvanzado.Enabled = true;
+            }                
+            else
+            {
+                txtFiltroAvanzado.Enabled = false;
+            }
+
+            btnBuscar.Enabled = txtFiltroAvanzado.Enabled;
+        }
+
         protected void btnBuscar_Click(object sender, EventArgs e)
         {
             string campo = ddlCampo.SelectedItem.ToString();
             string criterio = ddlCriterio.SelectedItem.ToString();
             string filtro = txtFiltroAvanzado.Text;
+
+            if (String.IsNullOrEmpty(campo) || String.IsNullOrEmpty(criterio) || String.IsNullOrWhiteSpace(filtro))
+            {
+                lblError.Text = "No puede dejar nada vacío";
+                return;
+            }
 
             try
             {
@@ -102,6 +147,7 @@ namespace comercio_web
                     }
                 }
 
+                lblError.Text = string.Empty;
                 ComercioNegocio negocio = new ComercioNegocio();
                 dgvArticulos.DataSource = negocio.FiltrarArticulos(campo, criterio, filtro);
                 dgvArticulos.DataBind();
@@ -115,14 +161,32 @@ namespace comercio_web
 
         protected void btnLimpiarFiltros_Click(object sender, EventArgs e)
         {
+            LimpiarFiltro();
+        }
+
+        private void LimpiarFiltro()
+        {
             // Deselecciona los filtros
             ddlCampo.ClearSelection();
             ddlCriterio.ClearSelection();
-            // Vacía el txtFiltroAvanzado
-            txtFiltroAvanzado.Text = "";
 
             // Vacía a ddlCriterio
             ddlCriterio.Items.Clear();
+
+            // Deshabilita ddlCriterio
+            ddlCriterio.Enabled = false;
+
+            // Vacía el txtFiltroAvanzado
+            txtFiltroAvanzado.Text = string.Empty;
+
+            // Deshabilita txtFiltroAvanzado
+            txtFiltroAvanzado.Enabled = false;
+
+            // Limpia cualquier mensaje de error previo
+            lblError.Text = string.Empty;
+
+            // Deshabilita btnBuscar
+            btnBuscar.Enabled = false;
 
             // Restaurar la lista completa de datos
             dgvArticulos.DataSource = Session["listaArticulos"];

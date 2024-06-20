@@ -101,8 +101,8 @@ namespace Negocio
             {
                 datos.SetearConsulta(consulta);
                 datos.SetearParametro("@id", usuario.Id);
-                datos.SetearParametro("@nombre", usuario.Nombre);
-                datos.SetearParametro("@apellido", usuario.Apellido);
+                datos.SetearParametro("@nombre", usuario.Nombre ?? (object)DBNull.Value);
+                datos.SetearParametro("@apellido", usuario.Apellido ?? (object)DBNull.Value);
                 datos.SetearParametro("@urlImagen", usuario.UrlImagenPerfil ?? (object)DBNull.Value);
 
                 datos.EjecutarAccion();
@@ -198,6 +198,68 @@ namespace Negocio
             }
         }
 
+        public List<Articulo> ObtenerListaArticulosFav(List<int> listaIds)
+        {
+            // Si la lista de IDs está vacía, retorna una lista vacía
+            if (listaIds == null || listaIds.Count == 0)
+                return new List<Articulo>();
+
+            AccesoDatos datos = new AccesoDatos();
+            List<Articulo> listaArticulos = new List<Articulo>();
+
+            // Convierte la lista de ids en una cadena separada por comas
+            string ids = string.Join(",", listaIds);
+
+            // Consulta para obtener los artículos basados en los ids proporcionados
+            string consulta = $@"SELECT A.Id AS idArticulo, A.Codigo, A.Nombre, A.Descripcion AS
+                artDescripcion, A.ImagenUrl AS imagen, A.Precio, A.IdCategoria, A.IdMarca, C.Descripcion
+                AS categoria, M.Descripcion AS marca
+                FROM ARTICULOS A
+                INNER JOIN CATEGORIAS C ON A.IdCategoria = C.Id
+                INNER JOIN MARCAS M ON A.IdMarca = M.Id
+                WHERE A.Id IN ({ids})";
+
+            try
+            {
+                datos.SetearConsulta(consulta);
+
+                datos.EjecutarConsulta();
+
+                while (datos.Lector.Read())
+                {
+                    Articulo art = new Articulo();
+
+                    art.Id = (int)datos.Lector["idArticulo"];
+                    art.CodigoArticulo = (string)datos.Lector["Codigo"];
+                    art.Nombre = (string)datos.Lector["Nombre"];
+                    art.Descripcion = (string)datos.Lector["artDescripcion"];
+                    art.Precio = (decimal)datos.Lector["Precio"];
+                    art.Imagen = (string)datos.Lector["imagen"];
+
+                    art.Categoria = new Categoria();
+                    art.Categoria.Id = (int)datos.Lector["IdCategoria"];
+                    art.Categoria.Descripcion = (string)datos.Lector["categoria"];
+
+                    art.Marca = new Marca();
+                    art.Marca.Id = (int)datos.Lector["IdMarca"];
+                    art.Marca.Descripcion = (string)datos.Lector["marca"];
+
+                    listaArticulos.Add(art);
+                }
+
+                return listaArticulos;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                datos.CerrarConexion();
+            }
+        }
+
+        // Método para eliminar un favorito de la base de datos
         public void EliminarFavorito(Favorito favorito)
         {
             AccesoDatos datos = new AccesoDatos();
@@ -208,6 +270,27 @@ namespace Negocio
                 datos.SetearConsulta(consulta);
                 datos.SetearParametro("@idUser", favorito.IdUsuario);
                 datos.SetearParametro("@idArticulo", favorito.IdArticulo);
+                datos.EjecutarAccion();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                datos.CerrarConexion();
+            }
+        }
+
+        public void EliminarFavoritoPorArticulo(int idArticulo)
+        {
+            AccesoDatos datos = new AccesoDatos();
+            string consulta = "DELETE FROM FAVORITOS WHERE IdArticulo = @idArt";
+
+            try
+            {
+                datos.SetearConsulta(consulta);
+                datos.SetearParametro("@idArt", idArticulo);
                 datos.EjecutarAccion();
             }
             catch (Exception ex)

@@ -11,16 +11,7 @@ namespace comercio_web
 {
 
 
-    public partial class Favoritos
+    public partial class AcercaDe
     {
-
-        /// <summary>
-        /// Control repArticulosFav.
-        /// </summary>
-        /// <remarks>
-        /// Campo generado automáticamente.
-        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Repeater repArticulosFav;
     }
 }

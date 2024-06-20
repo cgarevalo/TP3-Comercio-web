@@ -67,7 +67,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="AcercaDe.aspx" />
     <Content Include="Default.aspx" />
+    <Content Include="Detalles.aspx" />
     <Content Include="Error.aspx" />
     <Content Include="Estilos\background.css" />
     <Content Include="Estilos\clases.css" />
@@ -82,12 +84,26 @@
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AcercaDe.aspx.cs">
+      <DependentUpon>AcercaDe.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="AcercaDe.aspx.designer.cs">
+      <DependentUpon>AcercaDe.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Default.aspx.cs">
       <DependentUpon>Default.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="Default.aspx.designer.cs">
       <DependentUpon>Default.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Detalles.aspx.cs">
+      <DependentUpon>Detalles.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Detalles.aspx.designer.cs">
+      <DependentUpon>Detalles.aspx</DependentUpon>
     </Compile>
     <Compile Include="Error.aspx.cs">
       <DependentUpon>Error.aspx</DependentUpon>

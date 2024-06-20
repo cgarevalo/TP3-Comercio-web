@@ -33,7 +33,8 @@
         <div class="col-4">
             <div class="mb-3">
                 <label for="fudImagenPerfil" class="form-label">Imagen de perfíl</label>
-                <asp:FileUpload ID="fudImagenPerfil" CssClass="form-control" runat="server" OnChange="previewImage('', '')" />
+                <asp:FileUpload ID="fudImagenPerfil" CssClass="form-control" runat="server" accept=".jpg,.jpeg,.png,.gif" OnChange="previewImage()" />
+                <asp:Label ID="lblFudError" runat="server" CssClass="text-danger" Text=""></asp:Label>
             </div>
 
             <img id="imgPerfil" class="img-fluid m-3" runat="server" src="https://static.vecteezy.com/system/resources/previews/016/916/479/original/placeholder-icon-design-free-vector.jpg" alt="" />

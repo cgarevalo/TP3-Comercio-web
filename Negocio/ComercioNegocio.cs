@@ -249,12 +249,15 @@ namespace Negocio
         }
 
         // Método para eliminar un artículo de la base de datos
-        public void Eliminar(int id)
+        public void Eliminar(int idArticulo)
         {
             try
             {
+               UsuarioNegocio usuarioNegocio = new UsuarioNegocio();
+                usuarioNegocio.EliminarFavoritoPorArticulo(idArticulo);
+
                 datosAcceso.SetearConsulta("Delete From ARTICULOS Where Id = @idArt");
-                datosAcceso.SetearParametro("@idArt", id);
+                datosAcceso.SetearParametro("@idArt", idArticulo);
                 datosAcceso.EjecutarAccion();
 
             }

@@ -59,7 +59,7 @@
                 <asp:TextBox ID="txtPrecio" CssClass="form-control" runat="server"></asp:TextBox>
                 <div class="modal-content">
                     <asp:RequiredFieldValidator ErrorMessage="Precio requerido" CssClass="text-danger" ControlToValidate="txtPrecio" runat="server" />
-                    <asp:RegularExpressionValidator ErrorMessage="Ingrese un precio válido" CssClass="text-danger" ControlToValidate="txtPrecio" ValidationExpression="^\d+(,\d{1,2})?$" runat="server" />
+                    <asp:RegularExpressionValidator ErrorMessage="Ingrese un precio válido" CssClass="text-danger" ControlToValidate="txtPrecio" ValidationExpression="^\d{1,3}(\.\d{3})*(,\d{2})?$" runat="server" />
                 </div>
             </div>
 
@@ -114,7 +114,7 @@
                     <%  } %>
 
                     <div class="mb-3">
-                        <img id="imgImagenArt" src="#" class="img-fluid mb-3" height="450" width="350" runat="server" />
+                        <img id="imgImagenArt" src="#" class="img-fluid mb-3 " height="450" width="350" runat="server" />
                     </div>
                 </ContentTemplate>
             </asp:UpdatePanel>
