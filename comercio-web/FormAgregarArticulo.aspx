@@ -1,4 +1,4 @@
-﻿<%@ Page Title="" Language="C#" MasterPageFile="~/MiMaster.Master" AutoEventWireup="true" CodeBehind="FormAgregarArticulo.aspx.cs" Inherits="comercio_web.FormAgregarArticulo" %>
+﻿<%@ Page Title="Agregar artículo" Language="C#" MasterPageFile="~/MiMaster.Master" AutoEventWireup="true" CodeBehind="FormAgregarArticulo.aspx.cs" Inherits="comercio_web.FormAgregarArticulo" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
     <link href="Estilos/clases.css" rel="stylesheet" />

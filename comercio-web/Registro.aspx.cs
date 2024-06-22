@@ -29,16 +29,16 @@ namespace comercio_web
 
                 if (!String.IsNullOrWhiteSpace(email) || !String.IsNullOrWhiteSpace(pass))
                 {
-                    lblError.Text = "";
+                    lblError.Text = string.Empty;
                     Usuario nuevoUsuario = new Usuario();
                     UsuarioNegocio negocioUsuario = new UsuarioNegocio();
 
                     nuevoUsuario.Email = email;
                     nuevoUsuario.Pass = pass;
-                    nuevoUsuario.Jerarquia = Jerarquia.Cliente;
+                    nuevoUsuario.Jerarquia = Jerarquia.Cliente; // Se registra como cliente por defecto
 
                     negocioUsuario.RegistrarUsuario(nuevoUsuario);
-                    Response.Redirect("MiPerfil.aspx", false);
+                    Response.Redirect("Login.aspx", false);
                 }
                 else
                 {

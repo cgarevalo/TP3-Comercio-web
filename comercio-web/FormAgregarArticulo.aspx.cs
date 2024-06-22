@@ -62,9 +62,12 @@ namespace comercio_web
                 // El operador ternario se utiliza para verificar si el parámetro "id" está presente en la URL. Si Request.QueryString["id"] no es nulo, se asigna su valor a la variable "id", si no, "id" se establece como una cadena vacía ("").
 
 
-                // Si id no está vacío y no es un postback
+                // Si id no está vacío y no es un postback (Se está modificando)
                 if (id != "" && !IsPostBack)
                 {
+                    // Cambia el título de la página a "Modificar artículo", porque se está modificando
+                    Title = "Modificar artículo";
+
                     // Obtiene el artículo seleccionado para su modificación
                     List<Articulo> articulo = negocio.ListarArticulos(id);
                     Articulo seleccionado = articulo[0];

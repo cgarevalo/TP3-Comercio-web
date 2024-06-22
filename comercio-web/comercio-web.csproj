@@ -71,12 +71,10 @@
     <Content Include="Default.aspx" />
     <Content Include="Detalles.aspx" />
     <Content Include="Error.aspx" />
-    <Content Include="Estilos\background.css" />
     <Content Include="Estilos\clases.css" />
     <Content Include="Favoritos.aspx" />
     <Content Include="FormAgregarArticulo.aspx" />
     <Content Include="Global.asax" />
-    <Content Include="JavaScript\funciones.js" />
     <Content Include="ListaArticulos.aspx" />
     <Content Include="Login.aspx" />
     <Content Include="MiPerfil.aspx" />

@@ -15,7 +15,13 @@ namespace comercio_web
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-            if (!IsPostBack)
+            if (Request.QueryString["id"] == null)
+            {
+                Response.Redirect("Default.aspx", false);
+                return;
+            }
+
+                if (!IsPostBack)
             {
                 if (Request.QueryString["id"] != "")
                 {

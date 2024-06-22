@@ -1,4 +1,4 @@
-﻿<%@ Page Title="" Language="C#" MasterPageFile="~/MiMaster.Master" AutoEventWireup="true" CodeBehind="MiPerfil.aspx.cs" Inherits="comercio_web.MiPerfil" %>
+﻿<%@ Page Title="Mi perfil" Language="C#" MasterPageFile="~/MiMaster.Master" AutoEventWireup="true" CodeBehind="MiPerfil.aspx.cs" Inherits="comercio_web.MiPerfil" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
 </asp:Content>
@@ -8,7 +8,7 @@
             <div class="mb-3">
                 <label for="txtEmail" class="form-label">Correo electrónico</label>
                 <asp:TextBox ID="txtEmail" CssClass="form-control mb-3" Enabled="false" runat="server"></asp:TextBox>
-                <asp:Button ID="btnCambiarCorreo" CssClass="btn btn-primary" runat="server" Text="Cambiar correo electrónico" />
+                <asp:Button ID="btnCambiarCorreo" CssClass="btn btn-primary" runat="server" Text="Cambiar correo electrónico" Enabled="false" />
             </div>
 
             <div class="mb-3">
