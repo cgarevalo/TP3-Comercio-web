@@ -9,21 +9,21 @@
     <div class="row">
         <div class="col-5">
             <div class="mb-3">
-                <asp:Label ID="lblError" runat="server" Text=""></asp:Label>
+                <asp:Label ID="lblError" CssClass="text-danger" runat="server" Text=""></asp:Label>
             </div>
             <div class="mb-3">
                 <label for="txtCodigo" class="form-label">Código</label>
-                <asp:TextBox ID="txtCodigo" CssClass="form-control" runat="server"></asp:TextBox>
+                <asp:TextBox ID="txtCodigo" CssClass="form-control" MaxLength="50" runat="server"></asp:TextBox>
                 <asp:RequiredFieldValidator ErrorMessage="Código requerido" CssClass="text-danger" ControlToValidate="txtCodigo" runat="server" />
             </div>
             <div class="mb-3">
                 <label for="txtNombre" class="form-label">Nombre</label>
-                <asp:TextBox ID="txtNombre" CssClass="form-control" runat="server"></asp:TextBox>
+                <asp:TextBox ID="txtNombre" CssClass="form-control" MaxLength="50" runat="server"></asp:TextBox>
                 <asp:RequiredFieldValidator ErrorMessage="Nombre requerido" CssClass="text-danger" ControlToValidate="txtNombre" runat="server" />
             </div>
             <div class="mb-3">
                 <label>Descripción</label>
-                <asp:TextBox ID="txtDescripcion" CssClass="form-control" TextMode="MultiLine" runat="server"></asp:TextBox>
+                <asp:TextBox ID="txtDescripcion" CssClass="form-control" TextMode="MultiLine" MaxLength="150" runat="server"></asp:TextBox>
                 <asp:RequiredFieldValidator ErrorMessage="Descripción requerida" CssClass="text-danger" ControlToValidate="txtDescripcion" runat="server" />
             </div>
 
@@ -34,7 +34,7 @@
                         <asp:DropDownList ID="ddlCategoria" AutoPostBack="true" OnSelectedIndexChanged="ddlCategoria_SelectedIndexChanged" CssClass="form-control" runat="server"></asp:DropDownList>
 
                         <div class="mb-3 d-flex mt-1">
-                            <asp:TextBox ID="txtNuevaCategoria" CssClass="form-control me-3" Visible="false" runat="server"></asp:TextBox>
+                            <asp:TextBox ID="txtNuevaCategoria" CssClass="form-control me-3" MaxLength="50" Visible="false" runat="server"></asp:TextBox>
                             <asp:Button ID="btnAgregarCategoria" OnClick="btnAgregarCategoria_Click" CssClass="btn btn-success" runat="server" Text="Agregar" Visible="false" />
                         </div>
                         <asp:Label ID="lblMensajeCate" CssClass="form-label text-danger" Visible="false" runat="server" Text=""></asp:Label>
@@ -45,7 +45,7 @@
                         <asp:DropDownList ID="ddlMarca" CssClass="form-control" AutoPostBack="true" OnSelectedIndexChanged="ddlMarca_SelectedIndexChanged" runat="server"></asp:DropDownList>
 
                         <div class="mb-3 d-flex mt-1">
-                            <asp:TextBox ID="txtNuevaMarca" CssClass="form-control me-3" Visible="false" runat="server"></asp:TextBox>
+                            <asp:TextBox ID="txtNuevaMarca" CssClass="form-control me-3" MaxLength="50" Visible="false" runat="server"></asp:TextBox>
                             <asp:Button ID="btnAgregarMarca" CssClass="btn btn-success" Visible="false" runat="server" OnClick="btnAgregarMarca_Click" Text="Agregar" />
                         </div>
                         <asp:Label ID="lblMensajeMarc" CssClass="form-label text-danger" Visible="false" runat="server" Text=""></asp:Label>
@@ -106,10 +106,12 @@
                     <div class="mb-3">
                         <label for="txtImagenArt" class="form-label">Pegue la url de la imagen</label>
                         <div class="input-group">
-                            <asp:TextBox ID="txtImagenArt" CssClass="form-control" runat="server"></asp:TextBox>
+                            <asp:TextBox ID="txtImagenArt" CssClass="form-control" MaxLength="1000" runat="server"></asp:TextBox>
+                            <asp:CustomValidator ID="cvUrl" ControlToValidate="txtImagenArt" OnServerValidate="cvUrl_ServerValidate" runat="server" />
                             <asp:Button ID="btnVer" CssClass="btn btn-success" runat="server" Text="Ver" OnClick="btnVer_Click" />
                         </div>
                         <asp:Label ID="lblErrorUrl" CssClass="text-danger" runat="server" Text=""></asp:Label>
+                        <asp:Label ID="lblAdvertencia" runat="server"></asp:Label>
                     </div>
                     <%  } %>
 

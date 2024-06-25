@@ -49,8 +49,7 @@ namespace Negocio
             AccesoDatos datos = new AccesoDatos();
             string consulta = @"SELECT Id, email, Pass, nombre, apellido, urlImagenPerfil, admin
             FROM USERS
-            WHERE email = @email AND pass = @pass
-            ";
+            WHERE email = @email AND pass = @pass";
 
             try
             {

@@ -12,7 +12,7 @@
                     <div class="mb-3">
                         <h3>Inicio de sesión</h3>
                         <label for="txtEmail" class="form-label">Correo electrónico</label>
-                        <asp:TextBox ID="txtEmail" CssClass="form-control" runat="server"></asp:TextBox>
+                        <asp:TextBox ID="txtEmail" CssClass="form-control" runat="server" PlaceHolder="admin@admin.com/user@user.com" ></asp:TextBox>
                         <asp:RequiredFieldValidator ErrorMessage="Ingrese un correo" CssClass="text-danger" ControlToValidate="txtEmail" runat="server" />
                         <asp:RegularExpressionValidator ErrorMessage="Ingrese un correo válido" CssClass="text-danger" ValidationExpression="^[^@]+@[^@]+\.[a-zA-Z]{2,}$" ControlToValidate="txtEmail" runat="server" />
                     </div>

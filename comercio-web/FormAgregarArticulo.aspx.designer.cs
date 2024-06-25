@@ -240,6 +240,15 @@ namespace comercio_web
         protected global::System.Web.UI.WebControls.TextBox txtImagenArt;
 
         /// <summary>
+        /// Control cvUrl.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CustomValidator cvUrl;
+
+        /// <summary>
         /// Control btnVer.
         /// </summary>
         /// <remarks>
@@ -256,6 +265,15 @@ namespace comercio_web
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Label lblErrorUrl;
+
+        /// <summary>
+        /// Control lblAdvertencia.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblAdvertencia;
 
         /// <summary>
         /// Control imgImagenArt.

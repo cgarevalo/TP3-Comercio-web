@@ -140,10 +140,18 @@ namespace comercio_web
 
                 if (textosCargados && Seguridad.Validacion.ValidarNumero(stringPrecio, out precio))
                 {
+                    if (!(nombre.Length <= 50 && codigo.Length <= 50 && descripcion.Length <= 150))
+                    {
+                        lblError.Text = "Código y nombre no pueden superar los 50 caracteres y descripción no puede superar los 150";
+                        return;
+                        
+                    }
+
                     nuevoArticulo.CodigoArticulo = codigo;
                     nuevoArticulo.Nombre = nombre;
                     nuevoArticulo.Descripcion = descripcion;
                     nuevoArticulo.Precio = precio;
+
                 }
                 else
                 {
@@ -225,6 +233,9 @@ namespace comercio_web
 
                 if (Request.QueryString["id"] != null)
                 {
+                    // Limpia posibles mensajes de errores previos
+                    lblError.Text = string.Empty;
+
                     // Le asigna como id el id que se mando por url para que se pueda modificar
                     string id = Request.QueryString["id"];
 
@@ -234,6 +245,10 @@ namespace comercio_web
                 }
                 else
                 {
+
+                    // Limpia posibles mensajes de errores previos
+                    lblError.Text = string.Empty;
+
                     // Si no se está modificando, es una inserción nueva, llama al método para agregar un artículo
                     negocio.AgregarArticulo(nuevoArticulo);
                 }
@@ -478,6 +493,20 @@ namespace comercio_web
                 // Muestra un mensaje de error si la url no es válida
                 lblErrorUrl.Text = "Ingrese una url válida";
                 return false;
+            }
+        }
+
+        protected void cvUrl_ServerValidate(object source, ServerValidateEventArgs args)
+        {
+            if (args.Value.Length >= 1000)
+            {
+                args.IsValid = true;
+                lblAdvertencia.Text = "La URL tiene o supera los 1000 caracteres, verifique si funciona";
+            }
+            else
+            {
+                args.IsValid = true; // Siempre se valida en true para permitir que el formulario se envíe
+                lblAdvertencia.Text = string.Empty;
             }
         }
     }
