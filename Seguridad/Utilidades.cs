@@ -38,7 +38,7 @@ namespace Seguridad
             // Obtiene la ruta de la carpeta
             string ruta = Path.Combine(rutaServidor + "/Images/Artículos/");
 
-            // Verifica si el usuario ya tiene una imagen de perfil
+            // Verifica si ya hay tiene una imagen
             if (!String.IsNullOrEmpty(articulo.Imagen))
             {
                 // Ruta completa de la imagen antigua

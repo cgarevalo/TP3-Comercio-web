@@ -144,7 +144,7 @@ namespace comercio_web
                     {
                         lblError.Text = "Código y nombre no pueden superar los 50 caracteres y descripción no puede superar los 150";
                         return;
-                        
+
                     }
 
                     nuevoArticulo.CodigoArticulo = codigo;
@@ -177,33 +177,48 @@ namespace comercio_web
                             // Obtiene la extensión del archivo subido
                             string extensionArchivo = Path.GetExtension(fuImagenArt.FileName).ToLower();
                             // Lista de extensiones de imagen permitidas
-                            string[] extensiones = { ".jpg", ".jpeg", ".png", ".gif" };
+                            string[] extensiones = { ".jpg", ".jpeg", ".png", ".gif", ".webp" };
 
                             // Verifica si la extensión del archivo subido está en la lista de extensiones permitidas
                             if (extensiones.Contains(extensionArchivo))
                             {
+                                // Si se está modificando (hay un id en la query string)
+                                if (Request.QueryString["id"] != null)
+                                {
+                                    // Envía el artículo en sesión y no el nuevo porque se está modificando y se tiene que eliminar la imagen anterior
+                                    nuevoArticulo.Imagen = Seguridad.Utilidades.GuardarImagen(fuImagenArt.PostedFile, (Articulo)Session["artSeleccionado"], Server.MapPath("~"));
+                                }
+                                else
+                                {
+                                    // Envía el articulo nuevo porque no se está modificando
+                                    nuevoArticulo.Imagen = Seguridad.Utilidades.GuardarImagen(fuImagenArt.PostedFile, nuevoArticulo, Server.MapPath("~"));
+                                }
+
+                                // Limpia cualquier mensaje de error previo
                                 lblErrorLocal.Text = string.Empty;
-                                nuevoArticulo.Imagen = Seguridad.Utilidades.GuardarImagen(fuImagenArt.PostedFile, nuevoArticulo, Server.MapPath("~"));
                             }
                             else
                             {
                                 // Si la extensión no es válida, muestra un mensaje de error y sale
-                                lblErrorLocal.Text = "Solo imágenes png, jpg, jpeg y gif";
+                                lblErrorLocal.Text = "Solo imágenes png, jpg, jpeg, gif y webp";
                                 return;
                             }
                         }
-                        // Si se está modificando (hay un id en la query string)
-                        else if (Request.QueryString["id"] != null)
-                        {
-                            // Conserva la imagen local si no se seleccionó otra al modificar
-                            nuevoArticulo.Imagen = ((Articulo)Session["artSeleccionado"]).Imagen;
-                        }
                         else
                         {
-                            // Si no se seleccionó una imagen nueva y no se está modificando, muestra un mensaje de error y retorna
-                            lblErrorLocal.Text = "Seleccione una imagen";
-                            return;
+                            if (Request.QueryString["id"] != null)
+                            {
+                                // Conserva la imagen local si no se seleccionó otra al modificar
+                                nuevoArticulo.Imagen = ((Articulo)Session["artSeleccionado"]).Imagen;
+                            }
+                            else
+                            {
+                                // Si no se seleccionó una imagen nueva y no se está modificando, muestra un mensaje de error y retorna
+                                lblErrorLocal.Text = "Seleccione una imagen";
+                                return;
+                            }
                         }
+                        
                         break;
 
                     case false:
@@ -444,7 +459,7 @@ namespace comercio_web
                         if (OrigenImagen)
                         {
                             Seguridad.Utilidades.EliminarImagenLocal(articulo, Server.MapPath("~"));
-                        }                      
+                        }
 
                         // Despues elimina el artículo
                         negocio.Eliminar(articulo.Id);

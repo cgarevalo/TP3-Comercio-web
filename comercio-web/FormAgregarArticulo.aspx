@@ -96,7 +96,7 @@
                         { %>
                     <div class="mb-3">
                         <label for="fuImagenArt" class="form-label">Seleccione una imagen</label>
-                        <asp:FileUpload ID="fuImagenArt" CssClass="form-control" accept=".jpg,.jpeg,.png,.gif" OnChange="preVisualizarImagen()" runat="server" />
+                        <asp:FileUpload ID="fuImagenArt" CssClass="form-control" accept=".jpg,.jpeg,.png,.gif,.webp" OnChange="preVisualizarImagen()" runat="server" />
                         <asp:Label ID="lblErrorLocal" CssClass="text-danger" runat="server" Text=""></asp:Label>
                     </div>
                     <%  }
