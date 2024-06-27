@@ -44,7 +44,7 @@
 
                     </div>
                     <asp:Button ID="btnBuscar" Text="Buscar" Enabled="false" OnClick="btnBuscar_Click" CssClass="btn btn-primary mb-3 me-3" runat="server" />
-                    <asp:Button ID="btnLimpiarFiltro" CssClass="btn btn-primary mb-3" OnClick="btnLimpiarFiltro_Click" runat="server" Enabled="false" Text="Limpiar filtros" />
+                    <asp:Button ID="btnLimpiarFiltro" CssClass="btn btn-primary mb-3" OnClick="btnLimpiarFiltro_Click" runat="server" Enabled="false" Text="Limpiar" />
                 </div>
 
                 <!-- Repeater -->
