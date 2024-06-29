@@ -29,6 +29,19 @@ namespace comercio_web
 
                 if (!String.IsNullOrWhiteSpace(email) || !String.IsNullOrWhiteSpace(pass))
                 {
+
+                    // Verifica que pass y email no superen los 20 y 100 caracteres, para que no de error
+                    if (pass.Length > 20)
+                    {
+                        lblError.Text = "La contraseña no puede superar los 20 caracteres";
+                        return;
+                    }
+                    if (email.Length > 100)
+                    {
+                        lblError.Text = "El correo no puede superar los 100 caracteres";
+                        return;
+                    }
+
                     lblError.Text = string.Empty;
                     Usuario nuevoUsuario = new Usuario();
                     UsuarioNegocio negocioUsuario = new UsuarioNegocio();

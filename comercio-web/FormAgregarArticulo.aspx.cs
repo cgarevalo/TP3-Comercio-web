@@ -140,6 +140,7 @@ namespace comercio_web
 
                 if (textosCargados && Seguridad.Validacion.ValidarNumero(stringPrecio, out precio))
                 {
+                    // Verifica que nombre, codigo y descripcion no superen cierta cantidad de caracteres, para que no de error
                     if (!(nombre.Length <= 50 && codigo.Length <= 50 && descripcion.Length <= 150))
                     {
                         lblError.Text = "Código y nombre no pueden superar los 50 caracteres y descripción no puede superar los 150";
@@ -218,7 +219,7 @@ namespace comercio_web
                                 return;
                             }
                         }
-                        
+
                         break;
 
                     case false:
@@ -228,6 +229,13 @@ namespace comercio_web
                             // Verifica si la URL es válida, si no, sale
                             if (!ComprobarUrl())
                                 return;
+
+                            // Verifica que la url de la imagen dada no supere los 1000 caracteres, para que no de error
+                            if (imagen.Length > 1000)
+                            {
+                                lblErrorUrl.Text = "La url no puede superar los 1000 caracteres";
+                                return;
+                            }
 
                             nuevoArticulo.Imagen = imagen;
                         }
@@ -299,8 +307,15 @@ namespace comercio_web
 
             try
             {
-                if (!String.IsNullOrEmpty(descCategoria))
+                if (!String.IsNullOrWhiteSpace(descCategoria))
                 {
+                    // Verifica que descCategoria no supere los 50 caracteres
+                    if (descCategoria.Length > 50)
+                    {
+                        lblMensajeCate.Text = "La categoría no puede superar los 50 caracteres";
+                        return;
+                    }
+
                     List<Categoria> categorias = (List<Categoria>)Session["listaCategorias"];
 
                     if (!categorias.Exists(c => c.Descripcion.ToLower() == descCategoria.ToLower()))
@@ -333,10 +348,12 @@ namespace comercio_web
                         // Esconde el botón y textBox
                         txtNuevaCategoria.Visible = false;
                         btnAgregarCategoria.Visible = false;
+
+                        // Borra mensajes de errores anteriores
+                        lblError.Text = string.Empty;
                     }
                     else
                     {
-                        lblMensajeCate.Visible = true;
                         lblMensajeCate.Text = "La categoría ya existe";
                         return;
                     }
@@ -377,8 +394,15 @@ namespace comercio_web
 
             try
             {
-                if (!String.IsNullOrEmpty(descMarca))
+                if (!String.IsNullOrWhiteSpace(descMarca))
                 {
+                    // Verifica que descMarca no supere los 50 caracteres
+                    if (descMarca.Length > 50)
+                    {
+                        lblMensajeMarc.Text = "La marca no puede superar los 50 caracteres";
+                        return;
+                    }
+
                     List<Marca> marcas = (List<Marca>)Session["listaMarcas"];
 
                     if (!marcas.Exists(m => m.Descripcion.ToLower() == descMarca.ToLower()))
@@ -411,10 +435,12 @@ namespace comercio_web
                         // Esconde el botón y textBox
                         txtNuevaMarca.Visible = false;
                         btnAgregarMarca.Visible = false;
+
+                        // Borra mensajes de errores anteriores
+                        lblError.Text = string.Empty;
                     }
                     else
                     {
-                        lblMensajeMarc.Visible = true;
                         lblMensajeMarc.Text = "La marca ya existe";
                         return;
                     }
@@ -508,20 +534,6 @@ namespace comercio_web
                 // Muestra un mensaje de error si la url no es válida
                 lblErrorUrl.Text = "Ingrese una url válida";
                 return false;
-            }
-        }
-
-        protected void cvUrl_ServerValidate(object source, ServerValidateEventArgs args)
-        {
-            if (args.Value.Length >= 1000)
-            {
-                args.IsValid = true;
-                lblAdvertencia.Text = "La URL tiene o supera los 1000 caracteres, verifique si funciona";
-            }
-            else
-            {
-                args.IsValid = true; // Siempre se valida en true para permitir que el formulario se envíe
-                lblAdvertencia.Text = string.Empty;
             }
         }
     }

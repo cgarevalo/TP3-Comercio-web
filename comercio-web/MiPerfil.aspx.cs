@@ -53,8 +53,23 @@ namespace comercio_web
                 return;
             }
 
+            // Verifica que nombre y apellido no superen los 50 caracteres, para que no de error
+            if (nombre.Length > 50)
+            {
+                lblError.Text = "El nombre no puede superar los 50 caracteres";
+                return;
+            }
+            if (apellido.Length > 50)
+            {
+                lblError.Text = "El apellido no puede superar los 50 caracteres";
+                return;
+            }
+
             try
             {
+                // Elimina cualquier mensaje de error anterior
+                lblError.Text = string.Empty;
+
                 // Verificar si la sesión del usuario está activa
                 if (Seguridad.Validacion.SesionActiva(Session["usuarioEnSesion"]))
                 {

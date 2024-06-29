@@ -10,7 +10,9 @@
                 <label for="txtEmail" class="form-label">Correo electrónico</label>
                 <asp:TextBox ID="txtEmail" CssClass="form-control" runat="server" PlaceHolder="user@user.com"></asp:TextBox>
                 <asp:RequiredFieldValidator ErrorMessage="Ingrese un correo" CssClass="text-danger" ControlToValidate="txtEmail" runat="server" />
-                <asp:RegularExpressionValidator ErrorMessage="Ingrese un correo válido" CssClass="text-danger" ValidationExpression="^[^@]+@[^@]+\.[a-zA-Z]{2,}$" ControlToValidate="txtEmail" runat="server" />
+                <div>
+                    <asp:RegularExpressionValidator ErrorMessage="Ingrese un correo válido" CssClass="text-danger" ValidationExpression="^[^@]+@[^@]+\.[a-zA-Z]{2,}$" ControlToValidate="txtEmail" runat="server" />
+                </div>
             </div>
 
             <div class="mb-3">
